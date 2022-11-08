@@ -1,16 +1,15 @@
 const fs = require('fs')
 const path = require('path')
+
+const src = fs.createWriteStream(path.join(__dirname, 'text.txt'))
 const { stdout, stdin } = process
-const output = fs.createWriteStream(path.join(__dirname, 'text.txt'))
 
-stdout.write('Enter the text here\n')
+stdout.write('Enter the text\n')
 
-stdin.on('data', (data) => {
-  if (data.toString().trim('exit') == 'exit') {
-    process.exit()
-  }
-  output.write(data)
-});
+stdin.on('data', data => {
+  if (data.toString().trim('exit') == 'exit') {process.exit()}
+  src.write(data)
+})
 
-process.on('exit', () => stdout.write('Good bye!'))
+process.on('exit', () => stdout.write('Good bye'))
 process.on('SIGINT', () => process.exit())
